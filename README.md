@@ -79,7 +79,6 @@ Before setting up the project, ensure you have the following installed:
    cd playwright-typescript-automation
    ```
 
-````
 2. Install Dependencies:
 
 ```bash
