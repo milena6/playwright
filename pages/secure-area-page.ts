@@ -1,7 +1,9 @@
 import { Page } from "@playwright/test";
 
 export function SecureAreaPage(page: Page) {
-  const success = page.getByText("You logged into a secure area");
+  const success = page
+    .getByText("You logged into a secure area")
+    .filter({ visible: true });
   const header = page.getByRole("heading", {
     name: "Secure Area",
     exact: true,

@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import CustomReporter from "./customReporter";
 
 export default defineConfig({
   testDir: "./tests",
@@ -6,7 +7,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 1,
   workers: 4,
-  reporter: "html",
+  reporter: process.env.CI
+    ? [["dot"], [CustomReporter]]
+    : [["html", { open: "never" }]],
   globalSetup: require.resolve("./global/global-setup.ts"),
 
   // Timeouts
