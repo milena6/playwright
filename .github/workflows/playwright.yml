@@ -31,6 +31,7 @@ jobs:
           path: playwright-report/
           retention-days: 10
   reporting:
+    if: ${{ always() }}
     needs: test
     runs-on: ubuntu-latest
     steps:
