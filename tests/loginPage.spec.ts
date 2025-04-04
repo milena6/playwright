@@ -53,6 +53,7 @@ test.beforeEach(async ({ page }) => {
 
       if (expectedError) {
         await test.step("Verify error message is displayed", async () => {
+          await expect(page).toHaveURL(URLS.LOGIN);
           await expect(page.getByText(`${expectedErrorMessage}`)).toBeVisible();
         });
       } else {
@@ -60,6 +61,7 @@ test.beforeEach(async ({ page }) => {
           await expect(page).toHaveURL(URLS.SECURE_PAGE);
           await expect(secureAreaPage.header).toBeVisible();
           await expect(secureAreaPage.subHeader).toBeVisible();
+          await expect(secureAreaPage.logoutButton).toBeVisible();
         });
       }
     });
