@@ -9,8 +9,10 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install dependencies
@@ -18,7 +20,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        with:
+        env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: npx playwright test  --reporter=html
@@ -29,8 +31,11 @@ jobs:
           path: playwright-report/
           retention-days: 10
   reporting:
+    needs: test
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
       - name: Download report
         uses: actions/download-artifact@v4
         with:
@@ -42,5 +47,5 @@ jobs:
         with:
           path: playwright-report/
       - name: Deploy to GitHub Pages
-        id: test
+        id: deployment
         uses: actions/deploy-pages@v4
