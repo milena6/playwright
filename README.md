@@ -15,7 +15,6 @@ Welcome to the Playwright TypeScript Automation Framework! This project utilizes
   - [Installation](#installation)
   - [Configuration](#configuration)
 - [Running Tests](#running-tests)
-- [Test Report](#test-report)
 - [Accessibility Testing](#accessibility-testing)
 - [GitHub Actions](#github-actions)
 
@@ -163,10 +162,6 @@ For an in-depth debugging experience, you can run tests in debug mode, which lau
 npx playwright test --debug
 ```
 
-## Test Report
-
-A report of the test run from GitHub Actions is avaliable [here](https://milena6.github.io/playwright/).
-
 ## Accessibility testing
 
 This project includes a simple automated accessibility test using `@axe-core/playwright`. The goal is to identify potential accessibility issues early in the development process.
@@ -203,4 +198,4 @@ This project uses `GitHub Actions` as a CI/CD tool to run Playwright tests autom
 - Displays a direct link to the report in the GitHub Actions summary
 
 ### Report Access
-After tests run, you can view the results 👉 [here](https://milena6.github.io/playwright/):
+After tests run, you can view the results 👉 [here](https://milena6.github.io/playwright/).
