@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     permissions:
-      contents: write  # To push to the gh-pages branch
+      contents: write # To push to the gh-pages branch
       pages: write
       id-token: write
     runs-on: ubuntu-latest
@@ -62,4 +62,4 @@ jobs:
           git push
 
       - name: Output Report URL
-        run: echo "### Playwright Test Report: https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
+        run: echo "### Playwright Test Report - https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
