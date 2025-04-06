@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/login-page";
-import { SecureAreaPage } from "../pages/secure-area-page";
-import { URLS } from "../constants";
+import { LoginPage } from "../../pages/login-page";
+import { SecureAreaPage } from "../../pages/secure-area-page";
+import { URLS } from "../../constants";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.LOGIN);
 });
+const longString = "a".repeat(500);
 
 [
   {
@@ -34,6 +35,13 @@ test.beforeEach(async ({ page }) => {
     expectedError: true,
     expectedErrorMessage: "Your username is invalid! ×",
     description: "Empty fields",
+  },
+  {
+    username: `${process.env.USERNAME!} `,
+    password: `${process.env.PASSWORD!} `,
+    expectedError: true,
+    expectedErrorMessage: "Your username is invalid! ×",
+    description: "Valid credentials with leading and trailing whitespace",
   },
 ].forEach(
   ({

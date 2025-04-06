@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    // ES2023 means modern features like top-level await, class fields, and improved regex methods will be supported
+    "target": "ES2023",
+    // commonjs is used by Node.js, which Playwright test runners rely on
+    "module": "commonjs",
+    // Tells the TypeScript compiler how to resolve imports
+    "moduleResolution": "node",
+    // Enables incremental builds to speed up future compilations (useful for larger test suites) - future-proofing
+    "incremental": true,
+    // Compiled JavaScript files will be output to the dist directory
+    "outDir": "dist",
+    // This tells TypeScript which files to process
+    "include": ["**/*.js", "**/*.ts", "**/*.tsx"],
+    // Skip processing node_modules and the out directory for faster compilation
+    "exclude": ["node_modules", "out"]
+  }
+}
