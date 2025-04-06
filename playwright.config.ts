@@ -6,7 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 1,
   workers: 4,
-  reporter: [["html", { open: "never" }]],
+  reporter: [["html", { open: "never" }], ["json"]],
 
   globalSetup: require.resolve("./global/global-setup.ts"),
 
