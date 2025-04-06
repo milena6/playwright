@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: lts/*
       - name: Run type checks
-        run: npm install typescript && npx tsc
+        run: npm install typescript && npx tsc --noEmit
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
@@ -26,7 +26,7 @@ jobs:
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-        run: npx playwright test ./functional --reporter=html
+        run: PLAYWRIGHT_JSON_OUTPUT_NAME=results.json npx playwright test ./functional --reporter=json
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -56,6 +56,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - uses: daun/playwright-report-summary@v3
+        if: always()
         with:
-          message: |
-            [Click here for Github Pages Playwright Report](${{ steps.deployment.outputs.page_url }})
+          report-file: results.json
