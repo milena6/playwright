@@ -6,11 +6,6 @@ on:
 
 jobs:
   test:
-    permissions:
-      id-token: write
-      pages: write
-    outputs:
-      timestamp: ${{ steps.timestampid.outputs.timestamp }}
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -31,6 +26,14 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: npx playwright test ./functional --reporter=html --output=playwright-report
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pages: write
+    outputs:
+      timestamp: ${{ steps.timestampid.outputs.timestamp }}
+    steps:
       - name: Set a timestamp
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
@@ -54,4 +57,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Write URL in summary
-        run: echo "### Test results (link available after 20 secs) - https://milena6.github.io/playwright/" >> $GITHUB_STEP_SUMMARY
+        run: echo "### Test results - https://milena6.github.io/playwright/" >> $GITHUB_STEP_SUMMARY
