@@ -7,6 +7,11 @@ on:
 
 jobs:
   test:
+    permissions:
+      id-token: write
+      pages: write
+    outputs:
+      timestamp: ${{ steps.timestampid.outputs.timestamp }}
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -27,20 +32,6 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: PLAYWRIGHT_JSON_OUTPUT_NAME=results.json npx playwright test ./functional --reporter=json
-
-  reporting:
-    if: ${{ always() }}
-    needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      pages: write
-    outputs:
-      timestamp: ${{ steps.timestampid.outputs.timestamp }}
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
       - name: Set a timestamp
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
