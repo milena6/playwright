@@ -8,6 +8,8 @@ jobs:
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    outputs:
+      timestamp: ${{ steps.timestampid.outputs.timestamp }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -32,7 +34,7 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ needs.test.outputs.timestamp }}
+          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
           path: playwright-report/
           retention-days: 10
   report:
@@ -42,12 +44,12 @@ jobs:
       id-token: write
       pages: write
     outputs:
-      timestamp: ${{ steps.timestampid.outputs.timestamp }}
+      timestamp: ${{ needs.test.outputs.timestamp }}
     steps:
       - name: Download report
         uses: actions/download-artifact@v4
         with:
-          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
+          name: playwright-report-${{ needs.test.outputs.timestamp }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
