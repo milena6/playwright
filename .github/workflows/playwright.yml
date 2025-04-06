@@ -27,12 +27,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: PLAYWRIGHT_JSON_OUTPUT_NAME=results.json npx playwright test ./functional --reporter=json
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 10
+
   reporting:
     if: ${{ always() }}
     needs: test
@@ -40,13 +35,25 @@ jobs:
     permissions:
       id-token: write
       pages: write
+    outputs:
+      timestamp: ${{ steps.timestampid.outputs.timestamp }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Set a timestamp
+        id: timestampid
+        run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
+          path: playwright-report/
+          retention-days: 10
       - name: Download report
         uses: actions/download-artifact@v4
         with:
-          pattern: playwright-report
+          pattern: playwright-report-*
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
@@ -60,3 +67,5 @@ jobs:
         if: always()
         with:
           report-file: results.json
+      - name: Write URL in summary
+        run: echo "### Test results (link available after 20 secs) - https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
