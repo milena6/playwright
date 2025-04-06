@@ -5,7 +5,6 @@ Welcome to the Playwright TypeScript Automation Framework! This project utilizes
 
 ## 📋 Table of Contents
 
-- [Project Overview](#project-overview)
 - [Rationale Behind Tool Selection](#rationale-behind-tool-selection)
 - [Features](#features)
 - [Design decisions](#design-decisions)
@@ -17,10 +16,6 @@ Welcome to the Playwright TypeScript Automation Framework! This project utilizes
 - [Running Tests](#running-tests)
 - [Accessibility Testing](#accessibility-testing)
 - [GitHub Actions](#github-actions)
-
-## Project Overview
-
-This framework automates the UI login functionality of a web application by simulating various user interactions and verifying expected outcomes. It utilizes Playwright for browser automation and TypeScript for enhanced code quality and maintainability.
 
 ## Rationale Behind Tool Selection
 
