@@ -32,7 +32,7 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
+          name: playwright-report-${{ needs.test.outputs.timestamp }}
           path: playwright-report/
           retention-days: 10
   report:
