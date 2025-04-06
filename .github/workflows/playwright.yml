@@ -5,6 +5,8 @@ on:
     branches: [main]
 
 jobs:
+  outputs:
+    timestamp: ${{ steps.timestampid.outputs.timestamp }}
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -29,7 +31,7 @@ jobs:
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
           path: playwright-report/
           retention-days: 10
   report:
@@ -38,8 +40,6 @@ jobs:
     permissions:
       id-token: write
       pages: write
-    outputs:
-      timestamp: ${{ steps.timestampid.outputs.timestamp }}
     steps:
       - name: Set a timestamp
         id: timestampid
@@ -47,7 +47,7 @@ jobs:
       - name: Download report
         uses: actions/download-artifact@v4
         with:
-          pattern: playwright-report-*
+          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
