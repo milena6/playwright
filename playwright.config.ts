@@ -6,7 +6,13 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 1,
   workers: 4,
-  reporter: [["html", { open: "never" }], ["json"]],
+  reporter: process.env.CI
+    ? [
+        ["html", { open: "never" }],
+        ["junit", { outputFile: "junit.xml" }],
+        ["json", { outputDir: "playwright-report" }],
+      ]
+    : [["html", { open: "never" }]],
 
   globalSetup: require.resolve("./global/global-setup.ts"),
 

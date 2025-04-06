@@ -31,7 +31,7 @@ jobs:
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-        run: PLAYWRIGHT_JSON_OUTPUT_NAME=results.json npx playwright test ./functional --reporter=json --output=playwright-report
+        run: PLAYWRIGHT_JSON_OUTPUT_NAME=results.json npx playwright test ./functional --reporter=json
       - name: Set a timestamp
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
