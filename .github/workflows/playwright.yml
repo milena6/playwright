@@ -5,8 +5,6 @@ on:
     branches: [main]
 
 jobs:
-  outputs:
-    timestamp: ${{ steps.timestampid.outputs.timestamp }}
   test:
     timeout-minutes: 10
     runs-on: ubuntu-latest
@@ -28,6 +26,9 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: npx playwright test ./functional --reporter=html --output=playwright-report
+      - name: Set a timestamp
+        id: timestampid
+        run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
@@ -40,10 +41,9 @@ jobs:
     permissions:
       id-token: write
       pages: write
+    outputs:
+      timestamp: ${{ steps.timestampid.outputs.timestamp }}
     steps:
-      - name: Set a timestamp
-        id: timestampid
-        run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
       - name: Download report
         uses: actions/download-artifact@v4
         with:
