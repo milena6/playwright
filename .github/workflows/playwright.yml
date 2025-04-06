@@ -8,49 +8,58 @@ on:
 jobs:
   test:
     permissions:
-      id-token: write
+      contents: write  # To push to the gh-pages branch
       pages: write
-    outputs:
-      timestamp: ${{ steps.timestampid.outputs.timestamp }}
-      page_url: https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}
-    timeout-minutes: 10
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Run type checks
         run: npm install typescript && npx tsc --noEmit
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: npx playwright test ./functional --reporter=html --output=playwright-report
-      - name: Set a timestamp
+
+      - name: Generate timestamp
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
-      - name: Download report
-        uses: actions/download-artifact@v4
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
         with:
-          pattern: playwright-report-*
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
-          path: playwright-report/
-          retention-days: 10
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-      - name: Write URL in summary
-        run: echo "### Test results (link available after 20 secs) - https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
+          ref: gh-pages
+          path: gh-pages
+          token: ${{ github.token }}
+
+      - name: Copy report to gh-pages directory
+        run: |
+          mkdir -p gh-pages/${{ steps.timestampid.outputs.timestamp }}
+          cp -r playwright-report/* gh-pages/${{ steps.timestampid.outputs.timestamp }}/
+
+      - name: Commit and push to gh-pages
+        working-directory: gh-pages
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Add Playwright report ${{ steps.timestampid.outputs.timestamp }}"
+          git push
+
+      - name: Output Report URL
+        run: echo "### Playwright Test Report: https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
