@@ -10,9 +10,14 @@
     "incremental": true,
     // Compiled JavaScript files will be output to the dist directory
     "outDir": "dist",
-    // This tells TypeScript which files to process
-    "include": ["**/*.js", "**/*.ts", "**/*.tsx"],
-    // Skip processing node_modules and the out directory for faster compilation
-    "exclude": ["node_modules", "out"]
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@tests/*": ["tests/*"],
+      "@pages/*": ["pages/*"]
+    }
+  },
+  // This tells TypeScript which files to process
+  "include": ["**/*.js", "**/*.ts", "**/*.tsx"],
+  // Skip processing node_modules and the out directory for faster compilation
+  "exclude": ["node_modules", "out"]
 }
