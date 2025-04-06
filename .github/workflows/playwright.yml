@@ -54,4 +54,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Write URL in summary
-        run: echo "### Upload the Test results here - https://trace.playwright.dev/" >> $GITHUB_STEP_SUMMARY
+        run: echo "### Test results (link available after 20 secs) - https://milena6.github.io/playwright/" >> $GITHUB_STEP_SUMMARY
