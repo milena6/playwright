@@ -1,3 +1,24 @@
+Skip to content
+Navigation Menu
+milena6
+playwright
+
+Type / to search
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+Playwright Tests
+config adjustment #21
+Jobs
+Run details
+Workflow file for this run
+.github/workflows/playwright.yml at d7502af
 name: Playwright Tests
 on:
   push:
@@ -8,65 +29,51 @@ on:
 jobs:
   test:
     permissions:
-      contents: write # To push to the gh-pages branch
-      pages: write
       id-token: write
+      pages: write
+    outputs:
+      timestamp: ${{ steps.timestampid.outputs.timestamp }}
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-
       - name: Run type checks
         run: npm install typescript && npx tsc --noEmit
-
       - name: Install dependencies
         run: npm ci
-
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-
       - name: Run Playwright tests
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: npx playwright test ./functional --reporter=html --output=playwright-report
-
-      - name: Generate timestamp
+      - name: Set a timestamp
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
-
-      - name: Create or checkout gh-pages branch
-        run: |
-          if ! git ls-remote --heads origin gh-pages | grep gh-pages; then
-            git checkout --orphan gh-pages
-            git rm -rf .
-            echo "<!DOCTYPE html><html><head><title>Playwright Reports</title></head><body><h1>Playwright Test Reports</h1></body></html>" > index.html
-            git add index.html
-            git commit -m "Initialize gh-pages branch"
-            git push origin gh-pages
-          else
-            git fetch origin gh-pages
-            git checkout gh-pages
-          fi
-
-      - name: Copy report to gh-pages directory
-        run: |
-          mkdir -p gh-pages/${{ steps.timestampid.outputs.timestamp }}
-          cp -r playwright-report/* gh-pages/${{ steps.timestampid.outputs.timestamp }}/
-
-      - name: Commit and push to gh-pages
-        working-directory: gh-pages
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Add Playwright report ${{ steps.timestampid.outputs.timestamp }}"
-          git push
-
-      - name: Output Report URL
-        run: echo "### Playwright Test Report - https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
+          path: playwright-report/
+          retention-days: 10
+      - name: Download report
+        uses: actions/download-artifact@v4
+        with:
+          pattern: playwright-report-*
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playwright-report/
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Write URL in summary
+        run: echo "### Upload the Test results here - https://trace.playwright.dev/" >> $GITHUB_STEP_SUMMARY
