@@ -2,6 +2,7 @@
 
 Welcome to the Playwright TypeScript Automation Framework! This project utilizes Playwright and TypeScript to provide a robust solution for end-to-end testing of web applications. Designed for reliability and scalability, it supports testing across multiple browsers and platforms.
 
+
 ## Table of Contents
 
 - [Project Overview](#project-overview)
@@ -17,6 +18,7 @@ Welcome to the Playwright TypeScript Automation Framework! This project utilizes
   - [UI Mode](#ui-mode)
   - [GitHub Actions](#github-actions)
 - [Playwright Best Practices Implementation](#playwright-best-practices-implementation)
+- [Test Report](#test-report) 
 
 ## Project Overview
 
@@ -31,6 +33,7 @@ This framework automates the UI login functionality of a web application by simu
 ## Features
 
 - **Cross-Browser Testing:** Supports Chromium, Firefox, and WebKit browsers.
+- **Cross-Platform Testing:** The tests run on web and mobile - making sure the design is responsive.
 - **Parallel Test Execution:** Run tests concurrently to speed up the testing process.
 - **Detailed Reporting:** Generates comprehensive reports with screenshots and logs for easy debugging.
 - **Extensible Framework:** Easily add new test cases and extend functionalities as needed.
@@ -45,9 +48,7 @@ This framework automates the UI login functionality of a web application by simu
 
    - **User-Visible Behavior:** Focused on selecting elements based on user-visible attributes rather than implementation details. This approach ensures that tests interact with elements as end-users would, enhancing test reliability. Additionaly, Playwright built-in locators provide auto waiting and retry-ability. [Test User-Visible Behavior](https://playwright.dev/docs/best-practices#test-user-visible-behavior).
 
-3. **Error Handling and Assertions:**
-
-   - **Robust Assertions:** Incorporated web-first assertions (i.e.`.toBeVisible()`) to validate expected outcomes, including error messages and successful navigation. The web-first assertions wait until the expected condition is met (timeouts set in playwright.config.ts). This practice ensures that the application behaves as intended under various scenarios. [Using Assertions in Playwright](https://playwright.dev/docs/best-practices#use-web-first-assertions).
+3. **Robust Assertions:** Incorporated web-first assertions (i.e.`.toBeVisible()`) to validate expected outcomes, including error messages and successful navigation. The web-first assertions wait until the expected condition is met (timeouts set in playwright.config.ts). This practice ensures that the application behaves as intended under various scenarios. [Using Assertions in Playwright](https://playwright.dev/docs/best-practices#use-web-first-assertions).
 
 4. **Security Considerations:**
 
@@ -94,3 +95,7 @@ npx playwright install --with-deps
 ### Configuration
 
 Configure the USERNAME and PASSWORD in the .env file located at the root of the project.
+
+## Test Report
+
+A report of the test run from GitHub Actions is avaliable [here](https://milena6.github.io/playwright/).
