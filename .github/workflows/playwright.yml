@@ -40,12 +40,19 @@ jobs:
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
-          token: ${{ github.token }}
+      - name: Create or checkout gh-pages branch
+        run: |
+          if ! git ls-remote --heads origin gh-pages | grep gh-pages; then
+            git checkout --orphan gh-pages
+            git rm -rf .
+            echo "<!DOCTYPE html><html><head><title>Playwright Reports</title></head><body><h1>Playwright Test Reports</h1></body></html>" > index.html
+            git add index.html
+            git commit -m "Initialize gh-pages branch"
+            git push origin gh-pages
+          else
+            git fetch origin gh-pages
+            git checkout gh-pages
+          fi
 
       - name: Copy report to gh-pages directory
         run: |
