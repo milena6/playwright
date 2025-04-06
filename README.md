@@ -41,7 +41,8 @@ Welcome to the Playwright TypeScript Automation Framework! This project utilizes
 
    - **User-Visible Behavior:** Focused on selecting elements based on user-visible attributes rather than implementation details. This approach ensures that tests interact with elements as end-users would, enhancing test reliability. Additionaly, Playwright built-in locators provide auto waiting and retry-ability. [Test User-Visible Behavior](https://playwright.dev/docs/best-practices#test-user-visible-behavior).
 
-3. **Robust Assertions:** Incorporated web-first assertions (i.e.`.toBeVisible()`) to validate expected outcomes, including error messages and successful navigation. The web-first assertions wait until the expected condition is met (timeouts set in playwright.config.ts). This practice ensures that the application behaves as intended under various scenarios. [Using Assertions in Playwright](https://playwright.dev/docs/best-practices#use-web-first-assertions).
+3. **Robust Assertions:** 
+   - Incorporated web-first assertions (i.e.`.toBeVisible()`) to validate expected outcomes, including error messages and successful navigation. The web-first assertions wait until the expected condition is met (timeouts set in playwright.config.ts). This practice ensures that the application behaves as intended under various scenarios. [Using Assertions in Playwright](https://playwright.dev/docs/best-practices#use-web-first-assertions).
 
 4. **Security Considerations:**
 
@@ -77,10 +78,10 @@ Before setting up the project, ensure you have the following installed:
 
 1. **Clone the Repository:**
 
-   ```bash
-   git clone https://github.com/yourusername/playwright-typescript-automation.git
-   cd playwright-typescript-automation
-   ```
+ ```bash
+ git clone https://github.com/yourusername/playwright-typescript-automation.git
+ cd playwright-typescript-automation
+ ```
 
 2. Install Dependencies:
 
