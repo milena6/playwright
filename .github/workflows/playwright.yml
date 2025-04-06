@@ -54,5 +54,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: playwright-reports-${{ steps.timestampid.outputs.timestamp }}
       - name: Write URL in summary
         run: echo "### Test results (link available after 20 secs) - https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
