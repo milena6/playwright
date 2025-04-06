@@ -12,6 +12,7 @@ jobs:
       pages: write
     outputs:
       timestamp: ${{ steps.timestampid.outputs.timestamp }}
+      page_url: https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -35,12 +36,6 @@ jobs:
       - name: Set a timestamp
         id: timestampid
         run: echo "timestamp=$(date --utc +%Y%m%d_%H%M%SZ)" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
-          path: playwright-report/
-          retention-days: 10
       - name: Download report
         uses: actions/download-artifact@v4
         with:
@@ -48,13 +43,14 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
+          name: playwright-report-${{ steps.timestampid.outputs.timestamp }}
           path: playwright-report/
+          retention-days: 10
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          artifact_name: playwright-reports-${{ steps.timestampid.outputs.timestamp }}
       - name: Write URL in summary
         run: echo "### Test results (link available after 20 secs) - https://milena6.github.io/playwright/${{ steps.timestampid.outputs.timestamp }}/" >> $GITHUB_STEP_SUMMARY
