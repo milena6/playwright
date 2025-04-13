@@ -6,7 +6,6 @@ import { URLS } from "../../constants";
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.LOGIN);
 });
-const longString = "a".repeat(500);
 
 [
   {
