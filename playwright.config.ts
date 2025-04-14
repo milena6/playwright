@@ -24,7 +24,7 @@ export default defineConfig({
 
   use: {
     baseURL: "https://the-internet.herokuapp.com",
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
 

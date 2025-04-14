@@ -1,55 +1,29 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/login-page";
-import { SecureAreaPage } from "../../pages/secure-area-page";
+import { LoginPage } from "@pages/login-page";
+import { SecureAreaPage } from "@pages/secure-area-page";
 import { URLS } from "../../constants";
+import { TEST_USERS } from "data/users";
+
+interface LoginTestCase {
+  username: string;
+  password: string;
+  expectedError: boolean;
+  expectedErrorMessage?: string;
+  description: string;
+}
 
 test.beforeEach(async ({ page }) => {
   await page.goto(URLS.LOGIN);
 });
 
-[
-  {
-    username: process.env.USERNAME!,
-    password: process.env.PASSWORD!,
-    expectedError: false,
-    description: "Valid credentials",
-  },
-  {
-    username: process.env.USERNAME!,
-    password: "invalidPass",
-    expectedError: true,
-    expectedErrorMessage: "Your password is invalid! ×",
-    description: "Valid username, incorrect password",
-  },
-  {
-    username: "invalidUser",
-    password: process.env.PASSWORD!,
-    expectedError: true,
-    expectedErrorMessage: "Your username is invalid! ×",
-    description: "Incorrect username, valid password",
-  },
-  {
-    username: "",
-    password: "",
-    expectedError: true,
-    expectedErrorMessage: "Your username is invalid! ×",
-    description: "Empty fields",
-  },
-  {
-    username: `${process.env.USERNAME!} `,
-    password: `${process.env.PASSWORD!} `,
-    expectedError: true,
-    expectedErrorMessage: "Your username is invalid! ×",
-    description: "Valid credentials with leading and trailing whitespace",
-  },
-].forEach(
+TEST_USERS.forEach(
   ({
     username,
     password,
     expectedError,
     expectedErrorMessage,
     description,
-  }) => {
+  }: LoginTestCase) => {
     test(`Login - ${description}`, async ({ page }) => {
       const loginPage = LoginPage(page);
       const secureAreaPage = SecureAreaPage(page);
